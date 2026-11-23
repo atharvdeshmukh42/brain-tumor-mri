@@ -73,13 +73,12 @@ export default function Viewer({ analysis }: { analysis: Analysis }) {
   return (
     <section className="panel viewer">
       <div className="panel-title">
-        <span>
+        <h2>
           <ScanLine size={17} /> MRI explorer
-        </span>
-        <span className="muted">Original voxel grid</span>
+        </h2>
       </div>
       <div className="viewer-toolbar">
-        <div className="segmented" aria-label="MRI modality">
+        <div className="segmented" role="group" aria-label="MRI sequence">
           {modalitySchema.options.map((value) => (
             <button
               key={value}
@@ -155,7 +154,6 @@ export default function Viewer({ analysis }: { analysis: Analysis }) {
           value={safeIndex}
           onChange={(event) => setIndex(Number(event.target.value))}
         />
-        <div className="muted">Use arrow keys to move through slices</div>
       </div>
       <div className="overlay-controls">
         <label>
@@ -188,6 +186,7 @@ export default function Viewer({ analysis }: { analysis: Analysis }) {
             max="1"
             step=".05"
             value={opacity}
+            disabled={overlay === "none" && !cam}
             onChange={(event) => setOpacity(Number(event.target.value))}
           />
         </label>
@@ -201,20 +200,22 @@ export default function Viewer({ analysis }: { analysis: Analysis }) {
           Grad-CAM <span className="muted">axial</span>
         </label>
       </div>
-      <div className="legend">
-        <span>
-          <i className="edema" />
-          Edema (2)
-        </span>
-        <span>
-          <i className="core" />
-          Necrotic core (1)
-        </span>
-        <span>
-          <i className="enhancing" />
-          Enhancing (4)
-        </span>
-      </div>
+      {overlay !== "none" && (
+        <div className="legend" role="group" aria-label="Segmentation labels">
+          <span>
+            <i className="edema" />
+            Edema (2)
+          </span>
+          <span>
+            <i className="core" />
+            Necrotic core (1)
+          </span>
+          <span>
+            <i className="enhancing" />
+            Enhancing (4)
+          </span>
+        </div>
+      )}
       {cam && (
         <p className="viewer-note">
           Grad-CAM highlights detector attention for this axial slice. It does
