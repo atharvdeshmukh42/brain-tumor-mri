@@ -1,0 +1,26 @@
+{
+  "task": "segmentation",
+  "weights": "checkpoints/best.pt",
+  "model_name": "segresnet",
+  "roi": [
+    128,
+    128,
+    128
+  ],
+  "in_channels": [
+    "flair",
+    "t1",
+    "t1ce",
+    "t2"
+  ],
+  "out_channels": [
+    "WT",
+    "TC",
+    "ET"
+  ],
+  "threshold": 0.5,
+  "et_min_voxels": 0,
+  "sw_overlap": 0.5,
+  "normalization": "z-score per modality over non-zero voxels, clip +-5.0",
+  "output_labels": "BraTS: 1 necrotic core, 2 edema, 4 enhancing tumor"
+}

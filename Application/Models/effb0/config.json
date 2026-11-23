@@ -1,0 +1,40 @@
+{
+  "task": "detection",
+  "run_name": "effb0_v1",
+  "quick_run": false,
+  "model_name": "efficientnet_b0",
+  "timm_name": "efficientnet_b0",
+  "pretrained": true,
+  "epochs": 20,
+  "cases_per_batch": 4,
+  "slices_per_case": 16,
+  "case_repeats": 4,
+  "lr": 0.0003,
+  "weight_decay": 0.0001,
+  "warmup_epochs": 1,
+  "early_stop_patience": 6,
+  "min_brain_pixels": 500,
+  "pos_min_pixels": 1,
+  "threshold_method": "f1",
+  "amp": true,
+  "seed": 42,
+  "in_channels": [
+    "flair",
+    "t1",
+    "t1ce",
+    "t2"
+  ],
+  "canvas": 240,
+  "norm_clip": 5.0,
+  "n_cases": {
+    "train": 875,
+    "val": 188,
+    "test": 188
+  },
+  "n_slices": {
+    "train": 117011,
+    "val": 25192,
+    "test": 25009
+  },
+  "data_dir": "/content/drive/MyDrive/BrainTumor/data"
+}

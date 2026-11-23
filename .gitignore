@@ -5,13 +5,12 @@ __pycache__/
 node_modules/
 dist/
 .pytest_cache/
-Application/Models/
-Application/SampleCases/
+# New model artifacts and sample scans must be staged explicitly.
+/Application/Models/
+/Application/SampleCases/
 Application/Server/storage/
 .audit/
 Application/.env
 *.zip
-
-Application/.env
 *.tsbuildinfo
 .ruff_cache/

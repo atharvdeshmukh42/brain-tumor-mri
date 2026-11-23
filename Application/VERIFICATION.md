@@ -16,3 +16,5 @@ An independent GPT-6.2 Sol review reproduced edge cases in optional uploads, NIf
 Run the commands in README.md or use the project verification skill at ../.agents/skills/verify/SKILL.md. Real smoke tests must use their own MRI_STORAGE_DIR if another API process is running. Starting another API on the same storage recovers active jobs as interrupted.
 
 MPS and CUDA inference remain unverified. The verified execution mode is MRI_DEVICE=cpu. Dependency deprecation warnings in the Python test environment and upstream tree-shaking comment warnings during the frontend build do not fail the checks.
+
+The delivery snapshot was tested using only staged files. The frontend installed from the lockfile and built successfully. The shared Python and API suites passed 37 tests; 7 optional parity tests skipped because the archived pipeline is outside the delivery. Both packaged samples passed input validation, and a CPU smoke run on `BraTS2021_00495` verified inference, three overlay planes, Grad-CAM, and both downloads using the packaged checkpoints.

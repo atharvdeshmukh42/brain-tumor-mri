@@ -40,9 +40,8 @@ Code/
   tests/                              automated tests (run on the laptop, see section 7)
 ```
 
-Version 1 of the code (single `brats_utils.py` + `brats_plots.py`) is kept unchanged in `../Code_v1_before_refactor/`.
-Version 2 computes the same results (checked by `tests/test_same_results_as_v1.py`) and reads the same data files,
-so data prepared with version 1 does not need to be prepared again.
+The shared package reads data prepared with the original version of the pipeline. The optional parity tests use the
+original files if available at `../Code_v1_before_refactor/`; the archive is not part of the delivery.
 
 ---
 
@@ -179,8 +178,8 @@ python -m pytest tests
 ```
 
 The tests use small synthetic patients, so no real data is needed. They check preprocessing, storage, metrics with
-known answers, localization, model shapes, the training loop and resuming after a disconnect, and that every result
-is identical to version 1 of the code.
+known answers, localization, model shapes, the training loop and resuming after a disconnect. The optional parity
+tests skip if the original pipeline archive is absent.
 
 ## 8. Troubleshooting
 

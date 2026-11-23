@@ -7,13 +7,13 @@ Local detection, 3D segmentation, localization, and axial Grad-CAM using the tra
 Use Python 3.11 and Node.js 20.19+ (or 22.12+). Run from the repository root.
 
 ```sh
-/opt/homebrew/bin/python3.11 -m venv Application/Server/.venv
+python3.11 -m venv Application/Server/.venv
 Application/Server/.venv/bin/python -m pip install -r Application/Server/requirements.lock.txt
 npm ci --prefix Application/Client
 cp Application/.env.example Application/.env
 ```
 
-On systems without Homebrew, replace `/opt/homebrew/bin/python3.11` with your Python 3.11 executable. The supplied assets must be arranged as follows. Large assets and patient data are excluded from Git.
+Replace `python3.11` with the path to your Python 3.11 executable if needed. The repository includes both model checkpoints and two [BraTS sample cases](SampleCases/README.md) in the layout below. You can start the app without downloading data or retraining. Keep `Code/brats/` alongside `Application/` at the repository root because the backend imports it.
 
 ```text
 Application/

@@ -1,0 +1,133 @@
+{
+  "run_name": "effb0_v1",
+  "quick_run": false,
+  "model_name": "efficientnet_b0",
+  "parameters": 4009117,
+  "pretrained_loaded": true,
+  "best_epoch": 7,
+  "best_val_auc": 0.9855849812185692,
+  "epochs_trained": 13,
+  "training_hours": 2.9488207450840207,
+  "threshold": 0.29158565402030945,
+  "threshold_method": "f1",
+  "metrics": {
+    "train": {
+      "threshold": 0.29158565402030945,
+      "n": 117011,
+      "positives": 56978,
+      "tp": 54237,
+      "tn": 59063,
+      "fp": 970,
+      "fn": 2741,
+      "accuracy": 0.9682850330310826,
+      "sensitivity": 0.9518937133630524,
+      "specificity": 0.9838422201122716,
+      "precision": 0.9824297643414784,
+      "f1": 0.9669207113250434,
+      "balanced_accuracy": 0.967867966737662,
+      "auc": 0.9938993274994691,
+      "average_precision": 0.9947357549684617
+    },
+    "val": {
+      "threshold": 0.29158565402030945,
+      "n": 25192,
+      "positives": 12244,
+      "tp": 11393,
+      "tn": 12517,
+      "fp": 431,
+      "fn": 851,
+      "accuracy": 0.9491108288345507,
+      "sensitivity": 0.9304965697484482,
+      "specificity": 0.9667130058696324,
+      "precision": 0.9635487144790257,
+      "f1": 0.9467342529499752,
+      "balanced_accuracy": 0.9486047878090402,
+      "auc": 0.9855849812185692,
+      "average_precision": 0.9880984470886106
+    },
+    "test": {
+      "threshold": 0.29158565402030945,
+      "n": 25009,
+      "positives": 12166,
+      "tp": 11464,
+      "tn": 12395,
+      "fp": 448,
+      "fn": 702,
+      "accuracy": 0.9540165540405454,
+      "sensitivity": 0.942298208120993,
+      "specificity": 0.9651171844584598,
+      "precision": 0.9623908663532572,
+      "f1": 0.9522385580197691,
+      "balanced_accuracy": 0.9537076962897264,
+      "auc": 0.9884170599422567,
+      "average_precision": 0.9901705280984958
+    }
+  },
+  "metrics_at_0.5": {
+    "train": {
+      "threshold": 0.5,
+      "n": 117011,
+      "positives": 56978,
+      "tp": 53430,
+      "tn": 59588,
+      "fp": 445,
+      "fn": 3548,
+      "accuracy": 0.9658750032048269,
+      "sensitivity": 0.9377303520657095,
+      "specificity": 0.9925874102576916,
+      "precision": 0.9917401392111369,
+      "f1": 0.9639793239695813,
+      "balanced_accuracy": 0.9651588811617006,
+      "auc": 0.9938993274994691,
+      "average_precision": 0.9947357549684617
+    },
+    "val": {
+      "threshold": 0.5,
+      "n": 25192,
+      "positives": 12244,
+      "tp": 11199,
+      "tn": 12680,
+      "fp": 268,
+      "fn": 1045,
+      "accuracy": 0.9478802794537948,
+      "sensitivity": 0.9146520744854623,
+      "specificity": 0.9793018226753166,
+      "precision": 0.976628586378303,
+      "f1": 0.9446248576610013,
+      "balanced_accuracy": 0.9469769485803894,
+      "auc": 0.9855849812185692,
+      "average_precision": 0.9880984470886106
+    },
+    "test": {
+      "threshold": 0.5,
+      "n": 25009,
+      "positives": 12166,
+      "tp": 11302,
+      "tn": 12571,
+      "fp": 272,
+      "fn": 864,
+      "accuracy": 0.9545763525130952,
+      "sensitivity": 0.9289824099950682,
+      "specificity": 0.9788211477069221,
+      "precision": 0.9764990495939174,
+      "f1": 0.9521482729570345,
+      "balanced_accuracy": 0.9539017788509951,
+      "auc": 0.9884170599422567,
+      "average_precision": 0.9901705280984958
+    }
+  },
+  "patients_detected": {
+    "train": "875/875",
+    "val": "188/188",
+    "test": "188/188"
+  },
+  "mean_patient_slice_iou": {
+    "train": 0.9302676818069188,
+    "val": 0.8932098053514124,
+    "test": 0.9044358239845948
+  },
+  "inference": {
+    "cuda_ms_per_slice": 14.57182690501213,
+    "cpu_ms_per_slice": 84.5511257648468
+  }
+}

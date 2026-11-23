@@ -1,0 +1,16 @@
+{
+  "task": "detection",
+  "weights": "checkpoints/best.pt",
+  "model_name": "efficientnet_b0",
+  "timm_name": "efficientnet_b0",
+  "in_channels": [
+    "flair",
+    "t1",
+    "t1ce",
+    "t2"
+  ],
+  "canvas": 240,
+  "normalization": "z-score per modality over non-zero voxels, clip +-5.0",
+  "min_brain_pixels": 500,
+  "threshold": 0.29158565402030945
+}

@@ -1,0 +1,44 @@
+{
+  "task": "segmentation",
+  "run_name": "segresnet_v1",
+  "quick_run": false,
+  "model_name": "segresnet",
+  "epochs": 100,
+  "batch_size": 2,
+  "roi": [
+    128,
+    128,
+    128
+  ],
+  "fg_prob": 0.33,
+  "lr": 0.0005,
+  "weight_decay": 1e-05,
+  "warmup_epochs": 2,
+  "val_every": 2,
+  "val_cases_during_training": 40,
+  "early_stop_patience": null,
+  "sw_batch": 4,
+  "sw_overlap": 0.5,
+  "threshold": 0.5,
+  "et_min_voxels": 0,
+  "amp": true,
+  "seed": 42,
+  "in_channels": [
+    "flair",
+    "t1",
+    "t1ce",
+    "t2"
+  ],
+  "out_channels": [
+    "WT",
+    "TC",
+    "ET"
+  ],
+  "norm_clip": 5.0,
+  "n_cases": {
+    "train": 875,
+    "val": 188,
+    "test": 188
+  },
+  "data_dir": "/content/drive/MyDrive/BrainTumor/data"
+}
