@@ -41,9 +41,11 @@ Terminal 2, from the repository root:
 npm run dev --prefix Application/Client
 ```
 
-Open http://127.0.0.1:5173. Wait for the model status to become ready, then choose a sample or upload `.nii` / `.nii.gz` files. Uploads require FLAIR, T1, T1ce, T2 and optionally a reference segmentation with labels 0, 1, 2, 4. All files must share their 3D shape and affine and contain finite data. Limits are 128 MiB compressed per file, 256 MiB expanded per file, and 32 million voxels per volume. Processing can take several minutes on CPU. Use a single API process, without `--workers` or `--reload`, so one worker owns the models and job queue.
+Open http://127.0.0.1:5173. Wait for the model status to become ready, then choose a sample or upload `.nii` / `.nii.gz` files. Uploads require FLAIR, T1, T1ce, T2 and optionally a reference segmentation with labels 0, 1, 2, 4. All files must share their 3D shape and affine, declare millimeter spatial units, and contain finite data. Limits are 128 MiB compressed per file, 256 MiB expanded per file, and 32 million voxels per volume. Processing can take several minutes on CPU. Use a single API process, without `--workers` or `--reload`, so one worker owns the models and job queue.
 
 The Vite development server proxies `/api` to port 8000. CORS permits only `localhost:5173` and `127.0.0.1:5173`. Both services bind to loopback. This local application has no authentication and is not intended for network deployment.
+
+If port 8000 is already occupied, start the backend with `--port 8010` and the frontend with `VITE_API_TARGET=http://127.0.0.1:8010 npm run dev --prefix Application/Client`. Keep the frontend on port 5173.
 
 ## Viewing and outputs
 
@@ -61,7 +63,7 @@ npm run build --prefix Application/Client
 Application/Server/.venv/bin/python Application/Server/smoke.py --sample BraTS2021_00495
 ```
 
-Regular tests cover API validation, geometry, non-finite values, gzip expansion limits, safe filenames, CORS, durable history/restart recovery, PNG planes, and output downloads. They use a non-inference queue adapter and never load model weights. The separate smoke command loads the real models, processes a sample, verifies report/mask downloads, renders predicted overlays in all three planes, and computes real Grad-CAM. It persists an analysis and prints its report; default timeout is 1800 seconds.
+Regular tests cover API validation, geometry, non-finite values, gzip expansion limits, safe filenames, empty optional upload fields, millimeter units, full-volume expert comparisons, queue saturation, cancelled explanations, CORS, durable history/restart recovery, PNG planes, and output downloads. They use a non-inference queue adapter and never load model weights. The separate smoke command loads the real models, processes a sample, verifies report/mask downloads, renders predicted overlays in all three planes, and computes real Grad-CAM. It persists an analysis and prints its report; default timeout is 1800 seconds.
 
 ## API
 

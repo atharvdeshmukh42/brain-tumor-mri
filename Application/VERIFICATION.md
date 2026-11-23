@@ -1,19 +1,18 @@
 # Verification record
 
-Verified on 2026-11-23 with Python 3.11.14 on Apple Silicon and Node.js 25.3.0.
+Verified on 2026-11-23 with Python 3.11 and Node.js 25.3.0 on Apple Silicon.
 
-- `python -m pytest Application/Server/tests -q`: 5 passed. The Starlette test client emits an upstream AnyIO deprecation warning.
-- `npm run build --prefix Application/Client`: TypeScript and Vite production build passed.
-- `ruff check Application/Server/*.py Application/Server/tests/*.py`: passed.
-- Real CPU smoke against `BraTS2021_00495`: completed. Job `2ec7a994-fda3-4aab-9570-9e533b05d9e2` produced a JSON report and original-grid NIfTI mask. The script verified both downloads, predicted-overlay PNGs in axial/coronal/sagittal planes, and a real axial Grad-CAM PNG.
-- Live Chromium verification against a separate copy of the persisted real inference outputs: sample intake, all five upload fields, history selection, predicted overlay, coronal plane, disabled non-axial Grad-CAM, and history after reload passed. No page exceptions or mobile horizontal overflow occurred. Desktop and 390-pixel mobile screenshots were visually inspected.
+- The locked backend environment passes all 10 API tests. Tests cover history/restart recovery, request validation, uploads without a reference, finite data, matching geometry, millimeter units, gzip limits, safe filenames, queue saturation, cancelled explanations, full-volume reference comparisons, overlays, and downloads.
+- TypeScript and the Vite production build pass with Vite 6.4.6 and Zod 4.6.7. `npm audit` reports zero vulnerabilities.
+- Ruff check and format check pass for Application/Server.
+- Both model checkpoints load with strict architecture matching. Both supplied cases have aligned effective NIfTI affines, finite data, and valid BraTS reference labels.
+- Real CPU inference completed for both BraTS2021_00495 and BraTS2021_00621. The API smoke verified JSON and mask downloads, predicted PNG overlays in three planes, and actual axial Grad-CAM. Masks retain the original 240 × 240 × 155 grid.
+- A real Chrome interaction submitted a sample, waited for completion, selected a prediction overlay, changed planes, verified that non-axial Grad-CAM is disabled, enabled axial Grad-CAM, and reopened a completed analysis after reload. No page exceptions occurred.
+- A second real browser interaction uploaded the four required scans without an optional reference and completed inference successfully.
+- Desktop and 390-pixel mobile screenshots were inspected. The MRI image loads and the mobile layout has no horizontal overflow.
 
-The real smoke used the supplied model and sample directories at the original desktop location through `MRI_MODELS_DIR` and `MRI_SAMPLES_DIR`. No original assets or shared training code changed. The command is reproducible with the paths configured in `Application/.env`:
+An independent GPT-6.2 Sol review reproduced edge cases in optional uploads, NIfTI units, reference comparison outside the brain crop, full queues, and request cancellation. Each has a focused regression check and a fix. The comment pass found three redundant comments/docstrings, which were removed. The reviewer could inspect local decision records but could not audit the parent runtime transcript.
 
-```sh
-MRI_DEVICE=cpu Application/Server/.venv/bin/python Application/Server/smoke.py --sample BraTS2021_00495
-```
+Run the commands in README.md or use the project verification skill at ../.agents/skills/verify/SKILL.md. Real smoke tests must use their own MRI_STORAGE_DIR if another API process is running. Starting another API on the same storage recovers active jobs as interrupted.
 
-The first concurrent verification exposed a store recovery defect. Recovery now runs only when the API lifespan starts, rather than whenever a Store instance opens. The history test proves opening another Store preserves queued work and explicit startup recovery marks it interrupted. The full real smoke then passed.
-
-MPS/CUDA inference was not exercised. The second sample was discovered but not analyzed during this verification. Uploaded inputs were exercised through the real API validation suite; full model inference was exercised using the supplied sample. CPU inference is resource intensive. Use one backend process and allow several minutes.
+MPS and CUDA inference remain unverified. The verified execution mode is MRI_DEVICE=cpu. Dependency deprecation warnings in the Python test environment and upstream tree-shaking comment warnings during the frontend build do not fail the checks.

@@ -73,6 +73,11 @@ export default function App() {
     setBusy(true);
     setError("");
     try {
+      const formData = new FormData(form);
+      const reference = formData.get("seg");
+      if (reference instanceof File && !reference.name && reference.size === 0) {
+        formData.delete("seg");
+      }
       const result = await request(
         tab === "sample" ? "/analyses/sample" : "/analyses/upload",
         analysisSchema,
@@ -82,7 +87,7 @@ export default function App() {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ sample_id: sample }),
             }
-          : { method: "POST", body: new FormData(form) },
+          : { method: "POST", body: formData },
       );
       setSelected(result);
       setIntake(false);

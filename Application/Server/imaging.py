@@ -6,7 +6,6 @@ from pathlib import Path
 import nibabel as nib
 import numpy as np
 from PIL import Image
-
 from settings import MODALITIES, Settings
 
 
@@ -23,6 +22,8 @@ def validate_files(files: dict[str, Path], settings: Settings):
                     if total > settings.max_expanded_bytes:
                         raise ValueError(f"{name}: expanded gzip exceeds 256 MiB limit")
         image = nib.load(path)
+        if image.header.get_xyzt_units()[0] != "mm":
+            raise ValueError(f"{name}: spatial units must be millimeters (mm)")
         if (
             len(image.shape) != 3
             or min(image.shape) < 2
@@ -53,6 +54,19 @@ def validate_files(files: dict[str, Path], settings: Settings):
         "orientation": list(nib.aff2axcodes(affine)),
         "has_reference": "seg" in files,
     }
+
+
+def expert_comparison(files, folder):
+    from brats.case import brats_to_internal_labels
+    from brats.metrics import segmentation_metrics
+
+    predicted = nib.load(folder / "tumor_mask.nii.gz")
+    reference = nib.load(files["seg"])
+    return segmentation_metrics(
+        brats_to_internal_labels(predicted.get_fdata()),
+        brats_to_internal_labels(reference.get_fdata()),
+        reference.header.get_zooms()[:3],
+    )
 
 
 def input_files(folder: Path):

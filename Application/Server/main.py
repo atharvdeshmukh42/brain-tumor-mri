@@ -1,18 +1,17 @@
 import asyncio
-from contextlib import asynccontextmanager
 import queue
 import shutil
-from typing import Literal
+from contextlib import asynccontextmanager
+from typing import Annotated, Literal
 from uuid import UUID, uuid4
 
 import numpy as np
+from engine import Engine
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
-from pydantic import BaseModel, ConfigDict
-
-from engine import Engine
 from imaging import input_files, render_slice, validate_files
+from pydantic import BaseModel, ConfigDict
 from settings import MODALITIES, Settings
 from store import Store
 
@@ -112,21 +111,29 @@ def create_app(settings=None, engine_factory=Engine):
 
     @app.post("/api/analyses/upload", status_code=202)
     def upload(
-        flair: UploadFile = File(...),
-        t1: UploadFile = File(...),
-        t1ce: UploadFile = File(...),
-        t2: UploadFile = File(...),
-        seg: UploadFile | None = File(None),
+        flair: Annotated[UploadFile, File()],
+        t1: Annotated[UploadFile, File()],
+        t1ce: Annotated[UploadFile, File()],
+        t2: Annotated[UploadFile, File()],
+        seg: Annotated[UploadFile | str | None, File()] = None,
     ):
         require_ready()
+        if isinstance(seg, str):
+            if seg:
+                raise HTTPException(422, "seg: expected a NIfTI file")
+            seg = None
         id = str(uuid4())
         folder = settings.storage / "jobs" / id
         folder.mkdir(parents=True)
         try:
-            for key, file in dict(
-                flair=flair, t1=t1, t1ce=t1ce, t2=t2, seg=seg
-            ).items():
-                if file is None:
+            for key, file in {
+                "flair": flair,
+                "t1": t1,
+                "t1ce": t1ce,
+                "t2": t2,
+                "seg": seg,
+            }.items():
+                if file is None or (key == "seg" and not file.filename):
                     continue
                 filename = file.filename or ""
                 suffix = (
@@ -147,7 +154,8 @@ def create_app(settings=None, engine_factory=Engine):
                         output.write(chunk)
             return enqueue(id, "Uploaded case", folder)
         except Exception:
-            shutil.rmtree(folder, ignore_errors=True)
+            if store.get(id) is None:
+                shutil.rmtree(folder, ignore_errors=True)
             raise
         finally:
             for file in (flair, t1, t1ce, t2, seg):

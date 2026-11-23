@@ -8,7 +8,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "Code"))
 
-from imaging import input_files
+from imaging import expert_comparison, input_files
+
+logger = logging.getLogger(__name__)
 
 
 class Engine:
@@ -81,7 +83,7 @@ class Engine:
             )
             self.status = {"status": "ready", "device": requested, "error": None}
         except Exception as exc:
-            logging.exception("Model initialization failed")
+            logger.exception("Model initialization failed")
             self.status = {
                 "status": "error",
                 "device": None,
@@ -89,6 +91,8 @@ class Engine:
             }
         while (task := self.tasks.get()) is not None:
             kind, id, index, future = task
+            if future is not None and not future.set_running_or_notify_cancel():
+                continue
             folder = self.settings.storage / "jobs" / id
             try:
                 if self.status["status"] != "ready":
@@ -97,7 +101,10 @@ class Engine:
                 if kind == "analyze":
                     self.store.update(id, "running")
                     report = self.analyzer.analyze(files, folder)
-                    # Expert metrics can contain NaN for an absent region. JSON uses null.
+                    if "seg" in files:
+                        report["comparison_with_expert"] = expert_comparison(
+                            files, folder
+                        )
                     report = json.loads(
                         json.dumps(report), parse_constant=lambda _: None
                     )
@@ -110,7 +117,7 @@ class Engine:
                     self.make_cam(files, folder, index)
                     future.set_result(folder / f"cam-{index}.npy")
             except Exception as exc:
-                logging.exception("Job %s failed", id)
+                logger.exception("Job %s failed", id)
                 if future is not None:
                     future.set_exception(exc)
                 else:

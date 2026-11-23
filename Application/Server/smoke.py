@@ -1,8 +1,7 @@
-"""Run against real models and one sample. Not part of the regular test suite."""
-
 import argparse
 import json
 import time
+
 from fastapi.testclient import TestClient
 from main import create_app
 from settings import Settings

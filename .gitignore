@@ -9,6 +9,7 @@ Application/Models/
 Application/SampleCases/
 Application/Server/storage/
 .audit/
+Application/.env
 *.zip
 
 Application/.env
