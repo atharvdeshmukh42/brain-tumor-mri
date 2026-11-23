@@ -13,7 +13,7 @@ Verified on 2026-11-23 with Python 3.11 and Node.js 25.3.0 on Apple Silicon.
 
 An independent GPT-6.2 Sol review reproduced edge cases in optional uploads, NIfTI units, reference comparison outside the brain crop, full queues, and request cancellation. Each has a focused regression check and a fix. The comment pass found three redundant comments/docstrings, which were removed. The reviewer could inspect local decision records but could not audit the parent runtime transcript.
 
-Run the commands in README.md or use the project verification skill at ../.agents/skills/verify/SKILL.md. Real smoke tests must use their own MRI_STORAGE_DIR if another API process is running. Starting another API on the same storage recovers active jobs as interrupted.
+Run the commands in [the application README](README.md). Real smoke tests must use their own MRI_STORAGE_DIR if another API process is running. Starting another API on the same storage recovers active jobs as interrupted.
 
 MPS and CUDA inference remain unverified. The verified execution mode is MRI_DEVICE=cpu. Dependency deprecation warnings in the Python test environment and upstream tree-shaking comment warnings during the frontend build do not fail the checks.
 
