@@ -10,3 +10,7 @@ Application/SampleCases/
 Application/Server/storage/
 .audit/
 *.zip
+
+Application/.env
+*.tsbuildinfo
+.ruff_cache/
