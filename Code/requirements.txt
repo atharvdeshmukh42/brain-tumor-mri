@@ -1,0 +1,13 @@
+# Packages for running the project on the laptop (predict_case.py, the offline app, the tests).
+# On Google Colab nothing needs to be installed by hand: the notebooks install what is missing.
+torch
+timm
+monai
+nibabel
+numpy
+pandas
+scipy
+scikit-learn
+matplotlib
+tqdm
+pytest          # only for the tests in tests/
